@@ -236,6 +236,11 @@ def cbn_report():
 def network_graph():
     return jsonify(scanner.get_fraud_network())
 
+@app.route('/api/incidents', methods=['GET'])
+def incidents():
+    from modules import gs_database
+    return jsonify(gs_database.get_recent_incidents())
+  
 @app.route('/api/dashboard', methods=['GET'])
 def dashboard():
     return jsonify({
