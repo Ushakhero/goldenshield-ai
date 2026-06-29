@@ -13,7 +13,7 @@ Advanced ML model with Nigeria-specific fraud patterns:
 import numpy as np
 import random
 from datetime import datetime, timedelta
-
+from . import gs_database
 
 NIGERIAN_FRAUD_PATTERNS = {
     'bvn_fraud': {'weight': 0.25, 'description': 'BVN identity mismatch or synthetic identity'},
@@ -153,6 +153,16 @@ class GoldenShieldScanner:
             self.stats['fraud_detected'] += 1
             self.stats['amount_protected'] += amount
         self.transactions.insert(0, {**data, **result})
+
+        if is_fraud:
+            gs_database.log_incident(
+                risk_level=result['risk_level'],
+                fraud_score=result['fraud_score'],
+                pattern=result['pattern'],
+                description=result['pattern_detail'] or 'Suspicious transaction flagged',
+                raw_data={**data, **result},
+                source='goldenshield'
+            )
 
         return result
 
