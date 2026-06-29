@@ -16,6 +16,8 @@ socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 scanner = GoldenShieldScanner()
 threat_db = NigerianThreatDB()
 explainer = FraudExplainer()
+from modules import gs_database
+gs_database.init_db()
 
 LANDING = """<!DOCTYPE html>
 <html lang="en">
